@@ -3,12 +3,13 @@
 [![在线体验](https://img.shields.io/badge/▶_在线体验-GitHub_Pages-ff8a5c?style=for-the-badge)](https://shixingya.github.io/vocab-hub/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![零依赖](https://img.shields.io/badge/依赖-0%E4%B8%AA-34c36c)](#tech-stack)
+[![词库](https://img.shields.io/badge/内置托业词-3000%E8%AF%8D-a06bff)](data/toeic.json)
 
 > 🎮 Game-based vocabulary learning web app | 游戏化网页背单词工具
 
 vocab-hub 是一个静态网页背单词项目，以游戏化方式记忆单词，**词库与代码解耦**。
 
-✅ 首发内置：托业高频词库（266 词，易/中/难三级分级）
+✅ 首发内置：托业高频词库（3000 词，易/中/难三级分级）
 ✅ 后续支持：雅思 / 托福 / 四六级 等词汇库扩展
 ✅ 支持用户导入自定义词库（JSON 文件或粘贴文本）
 ✅ 纯前端零依赖：无框架、无构建工具、无后端、无广告
@@ -81,7 +82,7 @@ vocab-hub/
 │   ├── listen.js       # 听音挑战
 │   └── app.js          # 主控：导航/渲染/导入/成就检测
 └── data/
-    └── toeic.json      # 托业高频词库（266 词）
+    └── toeic.json      # 托业高频词库（3000 词，源自 ECDICT 高频商务词 + 手工精选）
 ```
 
 ## 🛠️ Tech Stack
