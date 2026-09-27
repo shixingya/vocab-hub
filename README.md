@@ -1,6 +1,7 @@
 # vocab-hub｜词汇中心
 
 [![在线体验](https://img.shields.io/badge/▶_在线体验-GitHub_Pages-ff8a5c?style=for-the-badge)](https://shixingya.github.io/vocab-hub/)
+[![release](https://img.shields.io/github/v/release/shixingya/vocab-hub?color=blueviolet&label=version)](https://github.com/shixingya/vocab-hub/releases/latest)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![零依赖](https://img.shields.io/badge/依赖-0%E4%B8%AA-34c36c)](#tech-stack)
 [![词库](https://img.shields.io/badge/内置托业词-3000%E8%AF%8D-a06bff)](data/toeic.json)
