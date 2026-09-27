@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>vocab-hub｜词汇中心 · 游戏化背单词</title>
+<meta name="description" content="面向全年龄段的趣味化单词自学平台：单词射击闯关 + 听音识词挑战，纯静态网页，打开即学。">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ============ 首页 ============ -->
+<div id="page-home" class="page active">
+  <header class="home-header">
+    <div class="logo">🎮 vocab-hub</div>
+    <div class="slogan">不内卷 · 不施压 · 每天进步一点点</div>
+  </header>
+
+  <!-- 词库选择 -->
+  <section class="card">
+    <div class="card-title">📚 选择词库</div>
+    <div id="bank-list" class="bank-list"></div>
+    <div class="level-row">
+      <span class="level-label">难度</span>
+      <button class="level-btn active" data-level="all">全部</button>
+      <button class="level-btn" data-level="easy">易</button>
+      <button class="level-btn" data-level="mid">中</button>
+      <button class="level-btn" data-level="hard">难</button>
+    </div>
+  </section>
+
+  <!-- 两大玩法入口 -->
+  <section class="mode-cards">
+    <div class="mode-card" id="go-shooter">
+      <div class="mode-icon">🔫</div>
+      <div class="mode-name">单词射击</div>
+      <div class="mode-desc">打飞机认单词<br>连击加分，冲高分！</div>
+    </div>
+    <div class="mode-card" id="go-listen">
+      <div class="mode-icon">🎧</div>
+      <div class="mode-name">听音挑战</div>
+      <div class="mode-desc">听发音选释义<br>训练听力语感！</div>
+    </div>
+  </section>
+
+  <!-- 今日打卡 + 数据概览 -->
+  <section class="card stats-card">
+    <div class="card-title">📊 学习数据</div>
+    <div class="stats-grid">
+      <div class="stat-item"><div class="stat-num" id="streak-num">0</div><div class="stat-label">🔥 连续打卡</div></div>
+      <div class="stat-item"><div class="stat-num" id="learned-num">0</div><div class="stat-label">✅ 已掌握</div></div>
+      <div class="stat-item"><div class="stat-num" id="best-shooter-num">0</div><div class="stat-label">🏆 射击最高分</div></div>
+      <div class="stat-item"><div class="stat-num" id="best-listen-num">0</div><div class="stat-label">🎧 听力最高连对</div></div>
+    </div>
+    <div class="checkin-row">
+      <div id="today-dots" class="today-dots"></div>
+      <div id="checkin-text" class="checkin-text">今天还没打卡哦～</div>
+    </div>
+  </section>
+
+  <!-- 工具入口 -->
+  <section class="tool-row">
+    <button class="tool-btn" id="go-mistakes">📕 错题本 <span id="mistake-count" class="badge">0</span></button>
+    <button class="tool-btn" id="go-achievements">🏅 成就</button>
+    <button class="tool-btn" id="go-import">📥 导入词库</button>
+  </section>
+
+  <footer class="home-footer">vocab-hub · 纯静态无广告 · 数据仅保存在本机</footer>
+</div>
+
+<!-- ============ 单词射击 ============ -->
+<div id="page-shooter" class="page game-page">
+  <div class="game-topbar">
+    <button class="back-btn" data-exit="shooter">‹ 退出</button>
+    <div class="game-score">得分 <span id="sh-score">0</span></div>
+    <div class="game-combo">连击 <span id="sh-combo">×0</span></div>
+    <div class="game-hp" id="sh-hp">❤️❤️❤️</div>
+  </div>
+  <div id="sh-prompt" class="sh-prompt">准备好起飞了吗？</div>
+  <canvas id="sh-canvas"></canvas>
+  <div class="sh-hint">点选与释义匹配的单词飞机 · 连击有加分</div>
+</div>
+
+<!-- ============ 听音挑战 ============ -->
+<div id="page-listen" class="page game-page">
+  <div class="game-topbar">
+    <button class="back-btn" data-exit="listen">‹ 退出</button>
+    <div class="game-score">第 <span id="ln-round">1</span>/10 题</div>
+    <div class="game-combo">连对 <span id="ln-streak">0</span></div>
+  </div>
+  <div class="ln-body">
+    <button id="ln-play" class="ln-play">🔊<span>再听一遍</span></button>
+    <div id="ln-tip" class="ln-tip">🎧 点击喇叭听发音，选出正确意思</div>
+    <div id="ln-options" class="ln-options"></div>
+    <div id="ln-feedback" class="ln-feedback"></div>
+  </div>
+</div>
+
+<!-- ============ 结果页（两模式共用） ============ -->
+<div id="page-result" class="page">
+  <div class="card result-card">
+    <div id="result-emoji" class="result-emoji">🎉</div>
+    <div id="result-title" class="result-title">太棒了！</div>
+    <div id="result-sub" class="result-sub"></div>
+    <div class="result-stats" id="result-stats"></div>
+    <div id="result-newwords" class="result-newwords"></div>
+    <button class="big-btn" id="result-again">再来一局</button>
+    <button class="ghost-btn" id="result-home">回首页</button>
+  </div>
+</div>
+
+<!-- ============ 错题本 ============ -->
+<div id="page-mistakes" class="page">
+  <div class="game-topbar">
+    <button class="back-btn" data-exit="mistakes">‹ 返回</button>
+    <div class="game-score">📕 错题本</div>
+    <button class="ghost-btn small" id="mk-clear">清空</button>
+  </div>
+  <div id="mk-list" class="mk-list"></div>
+  <div id="mk-empty" class="empty-tip hidden">还没有错题，继续保持！🌱</div>
+</div>
+
+<!-- ============ 成就页 ============ -->
+<div id="page-achievements" class="page">
+  <div class="game-topbar">
+    <button class="back-btn" data-exit="achievements">‹ 返回</button>
+    <div class="game-score">🏅 我的成就</div>
+  </div>
+  <div id="ach-list" class="ach-list"></div>
+</div>
+
+<!-- ============ 导入词库 ============ -->
+<div id="page-import" class="page">
+  <div class="game-topbar">
+    <button class="back-btn" data-exit="import">‹ 返回</button>
+    <div class="game-score">📥 导入自定义词库</div>
+  </div>
+  <div class="card import-card">
+    <div class="card-title">支持两种导入方式</div>
+    <p class="import-help">① 选择 JSON 文件（格式同内置词库）<br>② 直接粘贴文本，每行一个：<code>word, 释义</code></p>
+    <input type="file" id="im-file" accept=".json,.txt" class="im-file">
+    <textarea id="im-text" class="im-text" placeholder="abandon, 放弃；抛弃
+ability, 能力
+...也可以整行粘贴 JSON"></textarea>
+    <input type="text" id="im-name" class="im-name" placeholder="词库名称（如：我的生词本）" maxlength="20">
+    <button class="big-btn" id="im-do">导入</button>
+    <div id="im-msg" class="im-msg"></div>
+  </div>
+</div>
+
+<script src="js/store.js"></script>
+<script src="js/shooter.js"></script>
+<script src="js/listen.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
