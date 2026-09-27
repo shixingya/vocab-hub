@@ -15,6 +15,7 @@ vocab-hub 是一个静态网页背单词项目，以游戏化方式记忆单词�
 ✅ **22 种互动玩法**：单词射击、听音挑战 + 20 种答题/拼写/配对/动作/记忆小游戏，任选词库 × 玩法组合练习
 ✅ 支持用户导入自定义词库（JSON 文件或粘贴文本）
 ✅ 纯前端零依赖：无框架、无构建工具、无后端、无广告
+✅ 双击即用：词库内联打包，任何设备双击 `index.html` 即可离线运行，无需服务器/部署
 
 ## ✨ 核心玩法
 
@@ -47,9 +48,9 @@ vocab-hub 是一个静态网页背单词项目，以游戏化方式记忆单词�
 - 🏅 成就系统：8 枚成就（初次启程 / 七日之约 / 十连斩 / 神枪手 / 顺风耳…）达成实时弹窗
 - 📥 自定义词库导入：JSON / `word, 释义` 文本双格式，可删除
 
-## 📚 词库扩展（代码零改动）
+## 📚 词库扩展
 
-新增一套词库只需两步：
+内置词库数据以内联方式打包在 `js/data.js`（`window.VHBANKS`），使应用可在 `file://` 双击直接运行、无需服务器。新增/修改一套词库三步：
 
 1. 在 `data/` 放一个词库 JSON（格式参考 [data/toeic.json](data/toeic.json)）：
 
@@ -65,18 +66,26 @@ vocab-hub 是一个静态网页背单词项目，以游戏化方式记忆单词�
 }
 ```
 
-2. 在 `js/store.js` 顶部的注册表加一行：
+2. 在 `js/store.js` 顶部的注册表加一行 id，并在 `tools/build_datajs.py` 的 `ORDER` 列表补上同名 id：
 
 ```js
 var BUILTIN_BANKS = [
-  { id: 'toeic', url: 'data/toeic.json' },
-  { id: 'cet4',  url: 'data/cet4.json' }   // ← 新增
+  { id: 'toeic' },
+  { id: 'cet4' }   // ← 新增
 ];
+```
+
+3. 重新生成内联数据文件（游戏代码零改动）：
+
+```bash
+python tools/build_datajs.py   # 由 data/*.json 重新打包出 js/data.js
 ```
 
 ## 🚀 快速开始
 
-纯静态站点，直接用任意 HTTP 服务器打开（`file://` 下 fetch 受跨域限制）：
+**双击即用，离线可运行**：直接双击 `index.html`（或右键 → 用浏览器打开）即可，任何设备、无需部署、无需服务器、无需安装任何东西。词库已内联进 `js/data.js`，不再有 `fetch` 跨域限制。
+
+也可用任意 HTTP 服务器（如在线部署）：
 
 ```bash
 python -m http.server 8890
@@ -92,17 +101,20 @@ vocab-hub/
 ├── index.html          # 单页应用（首页/通用游戏页/结果页等多个区块）
 ├── css/style.css       # 温和糖果风 UI
 ├── js/
-│   ├── store.js        # 数据层：词库加载/掌握度/错题/打卡/成就/TTS/音效
+│   ├── data.js         # 【自动生成】内联 7 套词库(window.VHBANKS)，供 file:// 双击运行
+│   ├── store.js        # 数据层：词库装载/掌握度/错题/打卡/成就/TTS/音效
 │   ├── engine.js       # 通用游戏引擎 GameKit：会话/计分/连击/选择题引擎/退出清理
 │   ├── games_quiz.js   # 玩法 1-11：选择题族 + 拼写族
 │   ├── games_board.js  # 玩法 12-20：配对棋盘/动作/记忆类
 │   ├── shooter.js      # 单词射击（Canvas 游戏）
 │   ├── listen.js       # 听音挑战
 │   └── app.js          # 主控：词库/玩法网格/统计/导入/成就检测
+├── tools/
+│   └── build_datajs.py # 由 data/*.json 打包生成 js/data.js
 └── data/
     ├── primary.json    # 小学 / 初中 / 高中（词表 ∩ ECDICT）
     ├── junior.json  senior.json  toeic.json
-    └── kaoyan.json  toefl.json  ielts.json   # 各词库均为 w/ph/m/level 结构
+    └── kaoyan.json  toefl.json  ielts.json   # 各词库均为 w/ph/m/level 结构（data.js 的可维护源）
 ```
 
 ## 🛠️ Tech Stack

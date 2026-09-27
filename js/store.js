@@ -4,15 +4,16 @@
 
   var PREFIX = 'vh_';
 
-  // 内置词库注册表：新增词库只需在此加一行 + 放一个 data/xxx.json，游戏代码零改动
+  // 内置词库注册表：新增词库只需放 data/xxx.json + 在此加一行 id，再运行 tools/build_datajs.py
+  // 运行时数据来自内联的 js/data.js（window.VHBANKS），使应用可在 file:// 双击直接运行，无需服务器
   var BUILTIN_BANKS = [
-    { id: 'primary', url: 'data/primary.json' },
-    { id: 'junior', url: 'data/junior.json' },
-    { id: 'senior', url: 'data/senior.json' },
-    { id: 'toeic', url: 'data/toeic.json' },
-    { id: 'kaoyan', url: 'data/kaoyan.json' },
-    { id: 'toefl', url: 'data/toefl.json' },
-    { id: 'ielts', url: 'data/ielts.json' }
+    { id: 'primary' },
+    { id: 'junior' },
+    { id: 'senior' },
+    { id: 'toeic' },
+    { id: 'kaoyan' },
+    { id: 'toefl' },
+    { id: 'ielts' }
   ];
 
   function lsGet(key, dflt) {
@@ -30,21 +31,13 @@
   var customMeta = null; // 自定义词库元数据列表
 
   function loadBanks(onDone) {
-    // 1. 内置词库（逐个到货即回调，首屏渐进显示）
-    var pending = BUILTIN_BANKS.length;
-    var allDone = false, lastCount = -1;
-    function finish() {
-      if (!onDone) return;
-      var list = api.listBanks();
-      if (list.length !== lastCount || allDone) { lastCount = list.length; onDone(list); }
-    }
+    // 词库数据由 js/data.js 内联提供（window.VHBANKS），同步装载，兼容 file:// 双击运行
+    var V = (typeof window !== 'undefined' && window.VHBANKS) || {};
     BUILTIN_BANKS.forEach(function (b) {
-      fetch(b.url)
-        .then(function (r) { return r.json(); })
-        .then(function (data) { banks[b.id] = data; if (--pending === 0) allDone = true; finish(); })
-        .catch(function (err) { console.warn('词库加载失败', b.url, err); if (--pending === 0) allDone = true; finish(); });
+      if (V[b.id]) banks[b.id] = V[b.id];
+      else console.warn('内联词库缺失', b.id);
     });
-    if (pending === 0) finish();
+    if (onDone) onDone(api.listBanks());
   }
 
   function customList() {
