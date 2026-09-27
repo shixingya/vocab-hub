@@ -6,7 +6,13 @@
 
   // 内置词库注册表：新增词库只需在此加一行 + 放一个 data/xxx.json，游戏代码零改动
   var BUILTIN_BANKS = [
-    { id: 'toeic', url: 'data/toeic.json' }
+    { id: 'primary', url: 'data/primary.json' },
+    { id: 'junior', url: 'data/junior.json' },
+    { id: 'senior', url: 'data/senior.json' },
+    { id: 'toeic', url: 'data/toeic.json' },
+    { id: 'kaoyan', url: 'data/kaoyan.json' },
+    { id: 'toefl', url: 'data/toefl.json' },
+    { id: 'ielts', url: 'data/ielts.json' }
   ];
 
   function lsGet(key, dflt) {
@@ -24,16 +30,21 @@
   var customMeta = null; // 自定义词库元数据列表
 
   function loadBanks(onDone) {
-    // 1. 内置词库
+    // 1. 内置词库（逐个到货即回调，首屏渐进显示）
     var pending = BUILTIN_BANKS.length;
+    var allDone = false, lastCount = -1;
+    function finish() {
+      if (!onDone) return;
+      var list = api.listBanks();
+      if (list.length !== lastCount || allDone) { lastCount = list.length; onDone(list); }
+    }
     BUILTIN_BANKS.forEach(function (b) {
       fetch(b.url)
         .then(function (r) { return r.json(); })
-        .then(function (data) { banks[b.id] = data; if (--pending === 0) finish(); })
-        .catch(function (err) { console.warn('词库加载失败', b.url, err); if (--pending === 0) finish(); });
+        .then(function (data) { banks[b.id] = data; if (--pending === 0) allDone = true; finish(); })
+        .catch(function (err) { console.warn('词库加载失败', b.url, err); if (--pending === 0) allDone = true; finish(); });
     });
     if (pending === 0) finish();
-    function finish() { onDone && onDone(api.listBanks()); }
   }
 
   function customList() {

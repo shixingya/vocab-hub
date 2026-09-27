@@ -29,18 +29,10 @@
     </div>
   </section>
 
-  <!-- 两大玩法入口 -->
-  <section class="mode-cards">
-    <div class="mode-card" id="go-shooter">
-      <div class="mode-icon">🔫</div>
-      <div class="mode-name">单词射击</div>
-      <div class="mode-desc">打飞机认单词<br>连击加分，冲高分！</div>
-    </div>
-    <div class="mode-card" id="go-listen">
-      <div class="mode-icon">🎧</div>
-      <div class="mode-name">听音挑战</div>
-      <div class="mode-desc">听发音选释义<br>训练听力语感！</div>
-    </div>
+  <!-- 玩法入口（数据驱动，含特色射击/听音 + 20 种互动玩法） -->
+  <section class="card">
+    <div class="card-title">🕹️ 选择玩法</div>
+    <div id="mode-grid" class="mode-grid"></div>
   </section>
 
   <!-- 今日打卡 + 数据概览 -->
@@ -96,7 +88,18 @@
   </div>
 </div>
 
-<!-- ============ 结果页（两模式共用） ============ -->
+<!-- ============ 通用游戏页（20 种玩法共用） ============ -->
+<div id="page-game" class="page game-page">
+  <div class="game-topbar">
+    <button class="back-btn" id="game-exit">‹ 退出</button>
+    <div class="game-score" id="g-title">玩法</div>
+    <div class="hud" id="g-hud"></div>
+    <div class="game-progress" id="g-progress"></div>
+  </div>
+  <div id="game-body" class="game-body"></div>
+</div>
+
+<!-- ============ 结果页（所有玩法共用） ============ -->
 <div id="page-result" class="page">
   <div class="card result-card">
     <div id="result-emoji" class="result-emoji">🎉</div>
@@ -149,6 +152,9 @@ ability, 能力
 </div>
 
 <script src="js/store.js"></script>
+<script src="js/engine.js"></script>
+<script src="js/games_quiz.js"></script>
+<script src="js/games_board.js"></script>
 <script src="js/shooter.js"></script>
 <script src="js/listen.js"></script>
 <script src="js/app.js"></script>

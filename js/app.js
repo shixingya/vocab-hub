@@ -3,11 +3,13 @@
   'use strict';
 
   var S = window.Store;
+  var GameKit = window.GameKit;
+  GameKit.boot(S);
   window.VHShooter.boot(S);
   window.VHListen.boot(S);
   window.VHStore = S;
 
-  var state = { bankId: 'toeic', level: 'all', lastMode: 'shooter' };
+  var state = { bankId: 'primary', level: 'all', lastMode: 'shooter' };
 
   function $(id) { return document.getElementById(id); }
 
@@ -222,28 +224,59 @@
     toastAchievements(newly);
   }
 
+  /* ---------- 玩法：legacy（射击/听音）+ 数据驱动 20 种 ---------- */
+  var LEGACY = [
+    { id: 'shooter', icon: '🔫', name: '单词射击', desc: '打飞机认单词，连击冲高分', kind: 'legacy' },
+    { id: 'listen', icon: '🎧', name: '听音挑战', desc: '听发音选释义，练听力语感', kind: 'legacy' }
+  ];
+  function allModes() { return LEGACY.concat(GameKit.list()); }
+
+  function buildModeGrid() {
+    var box = $('mode-grid'); if (!box) return;
+    box.innerHTML = '';
+    allModes().forEach(function (m) {
+      var c = document.createElement('div');
+      c.className = 'mode-cell';
+      c.innerHTML = '<div class="mc-icon">' + m.icon + '</div><div class="mc-name"></div><div class="mc-desc"></div>';
+      c.querySelector('.mc-name').textContent = m.name;
+      c.querySelector('.mc-desc').textContent = m.desc;
+      c.onclick = function () { launchMode(m.id); };
+      box.appendChild(c);
+    });
+  }
+
+  function launchMode(id) {
+    var m = allModes().find(function (x) { return x.id === id; });
+    if (!m) return;
+    state.lastMode = id;
+    if (m.kind === 'legacy') {
+      if (id === 'shooter') { show('shooter'); window.VHShooter.start(currentWords(10), state.bankId); }
+      else { show('listen'); window.VHListen.start(currentWords(10), state.bankId); }
+    } else {
+      GameKit.launch(m, { bankId: state.bankId, level: state.level });
+    }
+  }
+
+  function showGame(mode) {
+    $('g-title').textContent = mode.icon + ' ' + mode.name;
+    $('game-body').innerHTML = '';
+    show('game');
+  }
+
   /* ---------- 事件绑定 ---------- */
   function bind() {
-    $('go-shooter').onclick = function () {
-      show('shooter');
-      window.VHShooter.start(currentWords(10), state.bankId);
-    };
-    $('go-listen').onclick = function () {
-      show('listen');
-      window.VHListen.start(currentWords(10), state.bankId);
-    };
+    buildModeGrid();
+    $('game-exit').onclick = function () { GameKit.exit(); show('home'); renderStats(); };
     document.querySelectorAll('[data-exit]').forEach(function (b) {
       b.onclick = function () {
         var which = b.getAttribute('data-exit');
         if (which === 'shooter') window.VHShooter.stop();
         if (which === 'listen') window.VHListen.stop();
+        GameKit.exit();
         show('home'); renderStats();
       };
     });
-    $('result-again').onclick = function () {
-      if (state.lastMode === 'shooter') { show('shooter'); window.VHShooter.start(currentWords(10), state.bankId); }
-      else { show('listen'); window.VHListen.start(currentWords(10), state.bankId); }
-    };
+    $('result-again').onclick = function () { launchMode(state.lastMode || 'shooter'); };
     $('result-home').onclick = function () { show('home'); renderStats(); };
 
     $('go-mistakes').onclick = function () { renderMistakes(); show('mistakes'); };
@@ -286,7 +319,7 @@
     });
   }
 
-  window.VHApp = { showResult: showResult, onGameEnd: onGameEnd };
+  window.VHApp = { showResult: showResult, onGameEnd: onGameEnd, showGame: showGame };
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();

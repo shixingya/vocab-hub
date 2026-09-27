@@ -4,14 +4,15 @@
 [![release](https://img.shields.io/github/v/release/shixingya/vocab-hub?color=blueviolet&label=version)](https://github.com/shixingya/vocab-hub/releases/latest)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![零依赖](https://img.shields.io/badge/依赖-0%E4%B8%AA-34c36c)](#tech-stack)
-[![词库](https://img.shields.io/badge/内置托业词-3000%E8%AF%8D-a06bff)](data/toeic.json)
+[![词库](https://img.shields.io/badge/内置词库-7套·万级词量-a06bff)](data)
+[![玩法](https://img.shields.io/badge/互动玩法-22种-ff8a5c)](#-游戏玩法22-种)
 
 > 🎮 Game-based vocabulary learning web app | 游戏化网页背单词工具
 
 vocab-hub 是一个静态网页背单词项目，以游戏化方式记忆单词，**词库与代码解耦**。
 
-✅ 首发内置：托业高频词库（3000 词，易/中/难三级分级）
-✅ 后续支持：雅思 / 托福 / 四六级 等词汇库扩展
+✅ 内置 7 套分级词库：小学 / 初中 / 高中 / 托业 / 考研 / 托福 / 雅思（均易·中·难分级，源自开源词典 [ECDICT](https://github.com/skywind3000/ECDICT) + 手工精选）
+✅ **22 种互动玩法**：单词射击、听音挑战 + 20 种答题/拼写/配对/动作/记忆小游戏，任选词库 × 玩法组合练习
 ✅ 支持用户导入自定义词库（JSON 文件或粘贴文本）
 ✅ 纯前端零依赖：无框架、无构建工具、无后端、无广告
 
@@ -23,6 +24,19 @@ vocab-hub 是一个静态网页背单词项目，以游戏化方式记忆单词�
 | 🎧 听音挑战 | 听单词发音 → 四选一选释义 | Web Speech API 发音，无 TTS 环境自动降级为"看词选义"，答对复播加深音形联结 |
 
 **温和学习理念**：不倒计时施压、飞机飘过不判死、中途退出可回首页，错题自动归入错题本复盘。
+
+## 🕹️ 游戏玩法（22 种）
+
+除特色玩法外，新增 20 种“边玩边记”小游戏，均由 `js/engine.js` 的通用引擎（会话/计分/连击/掌握度/错题）驱动，共用一套结果页：
+
+| 类别 | 玩法 |
+|---|---|
+| 🔫🎧 特色 | 单词射击、听音挑战 |
+| 📖 选择题族 | 看词选义、看义选词、听音选义、听音选词、首字母猜词、对错判断、限时抢答、火眼金睛（选正确拼写） |
+| ✏️ 拼写族 | 字母拼词（乱序重组）、补全单词、单词默写（键盘输入） |
+| 🔗 配对棋盘 | 连连看、记忆翻牌、对对碰（相邻消除）、两列连线、极速配对（限时） |
+| 🐹 动作类 | 打地鼠、泡泡消消 |
+| 🧠 记忆类 | 记忆序列、单词归位 |
 
 ## 📊 学习功能
 
@@ -75,15 +89,20 @@ python -m http.server 8890
 
 ```
 vocab-hub/
-├── index.html          # 单页应用（7 个页面区块）
+├── index.html          # 单页应用（首页/通用游戏页/结果页等多个区块）
 ├── css/style.css       # 温和糖果风 UI
 ├── js/
 │   ├── store.js        # 数据层：词库加载/掌握度/错题/打卡/成就/TTS/音效
+│   ├── engine.js       # 通用游戏引擎 GameKit：会话/计分/连击/选择题引擎/退出清理
+│   ├── games_quiz.js   # 玩法 1-11：选择题族 + 拼写族
+│   ├── games_board.js  # 玩法 12-20：配对棋盘/动作/记忆类
 │   ├── shooter.js      # 单词射击（Canvas 游戏）
 │   ├── listen.js       # 听音挑战
-│   └── app.js          # 主控：导航/渲染/导入/成就检测
+│   └── app.js          # 主控：词库/玩法网格/统计/导入/成就检测
 └── data/
-    └── toeic.json      # 托业高频词库（3000 词，源自 ECDICT 高频商务词 + 手工精选）
+    ├── primary.json    # 小学 / 初中 / 高中（词表 ∩ ECDICT）
+    ├── junior.json  senior.json  toeic.json
+    └── kaoyan.json  toefl.json  ielts.json   # 各词库均为 w/ph/m/level 结构
 ```
 
 ## 🛠️ Tech Stack
