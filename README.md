@@ -1,5 +1,9 @@
 # vocab-hub｜词汇中心
 
+[![在线体验](https://img.shields.io/badge/▶_在线体验-GitHub_Pages-ff8a5c?style=for-the-badge)](https://shixingya.github.io/vocab-hub/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![零依赖](https://img.shields.io/badge/依赖-0%E4%B8%AA-34c36c)](#tech-stack)
+
 > 🎮 Game-based vocabulary learning web app | 游戏化网页背单词工具
 
 vocab-hub 是一个静态网页背单词项目，以游戏化方式记忆单词，**词库与代码解耦**。
