@@ -9,6 +9,8 @@
 
 > 🎮 Game-based vocabulary learning web app | 游戏化网页背单词工具
 
+线上体验 线上地址：https://shixingya.github.io/vocab-hub/ 
+
 vocab-hub 是一个静态网页背单词项目，以游戏化方式记忆单词，**词库与代码解耦**。
 
 ✅ 内置 7 套分级词库：小学 / 初中 / 高中 / 托业 / 考研 / 托福 / 雅思（均易·中·难分级，源自开源词典 [ECDICT](https://github.com/skywind3000/ECDICT) + 手工精选）
