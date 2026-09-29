@@ -21,8 +21,33 @@
 
   /* ---- 2 看义选词 ---- */
   GK.register({ id: 'm2w', icon: '🔤', name: '看义选词', desc: '看中文，选出对应单词', count: 10,
-    run: function (ctx) { GK.runQuiz(ctx, { layout: 'grid2', prompt: function (c) { return '<div class="q-big q-cn">' + esc(c.m) + '</div>'; }, options: function (c) { return optsWord(ctx, c); },
-      after: function (cur) { ctx.speak(cur.w, 3); } }); } });
+    run: function (ctx) {
+      function repeat() {
+        var v = parseInt(ctx.Store.get('m2w_repeat', 3), 10);
+        return v >= 1 && v <= 5 ? v : 3;
+      }
+      GK.runQuiz(ctx, {
+        layout: 'grid2',
+        prompt: function (c) { return '<div class="q-big q-cn">' + esc(c.m) + '</div>'; },
+        options: function (c) { return optsWord(ctx, c); },
+        decorate: function (card) {
+          var row = GK.el('div', 'scr-row speak-set');
+          row.appendChild(GK.el('span', 'q-sub', '🔁 选后朗读'));
+          var sel = document.createElement('select');
+          sel.className = 'speak-set-sel';
+          [1, 2, 3, 4, 5].forEach(function (n) {
+            var o = document.createElement('option');
+            o.value = n; o.textContent = n + ' 遍';
+            if (n === repeat()) o.selected = true;
+            sel.appendChild(o);
+          });
+          sel.onchange = function () { ctx.Store.set('m2w_repeat', parseInt(sel.value, 10)); };
+          row.appendChild(sel);
+          card.appendChild(row);
+        },
+        after: function (cur) { ctx.speak(cur.w, repeat()); }
+      });
+    } });
 
   /* ---- 3 听音选义 ---- */
   GK.register({ id: 'a2m', icon: '🎧', name: '听音选义', desc: '听发音，选出中文意思', count: 10,

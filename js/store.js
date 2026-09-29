@@ -284,7 +284,7 @@
     markLearned: markLearned, learnedCount: learnedCount, learnedMap: learnedMap,
     mistakes: mistakes, addMistake: addMistake, removeMistake: removeMistake, clearMistakes: clearMistakes,
     checkin: checkin, streak: streak, checkedToday: checkedToday, recentDots: recentDots,
-    best: best, get: get, bump: bump,
+    best: best, get: get, set: lsSet, bump: bump,
     achList: achList, checkAchievements: checkAchievements,
     speak: speak, sfx: sfx,
     resetAll: function () {

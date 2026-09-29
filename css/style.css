@@ -241,6 +241,9 @@ body {
   font-size: 20px; font-weight: 800; cursor: pointer; box-shadow: 0 3px 10px rgba(140,120,180,.18); transition: .12s; }
 .scr-tile:hover { transform: translateY(-2px); background: #f3ecff; }
 .scr-row { display: flex; gap: 12px; }
+.speak-set { justify-content: center; align-items: center; gap: 8px; margin-top: 14px; }
+.speak-set-sel { padding: 6px 12px; border-radius: 999px; border: 1px solid #e5dff0; background: #f0ecf6;
+  font-size: 14px; color: #5a4f70; outline: none; cursor: pointer; font-family: inherit; }
 .dt-input { width: 84%; max-width: 320px; padding: 13px; border: 2px solid #e8e2f2; border-radius: 14px; font-size: 19px;
   text-align: center; letter-spacing: 2px; outline: none; color: #5a4f70; background: #fbfaff; }
 .dt-input:focus { border-color: #a06bff; }
