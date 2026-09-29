@@ -92,7 +92,7 @@
         + '<button class="mk-speak" title="播放发音">🔊</button>';
       el.querySelector('.mk-w').textContent = m.w + '  ' + (m.ph || '');
       el.querySelector('.mk-m').textContent = m.m;
-      el.querySelector('.mk-speak').onclick = function () { S.speak(m.w); };
+      el.querySelector('.mk-speak').onclick = function (ev) { ev.stopPropagation(); S.speak(m.w); };
       el.onclick = function () {
         if (confirm('从错题本移除「' + m.w + '」？')) {
           S.removeMistake(m.w);

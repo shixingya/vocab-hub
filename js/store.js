@@ -223,7 +223,6 @@
   }
   function speak(word) {
     if (!('speechSynthesis' in window)) return false;
-    speechSynthesis.cancel();
     var u = new SpeechSynthesisUtterance(word);
     u.lang = 'en-US';
     u.rate = 0.9;
@@ -233,7 +232,11 @@
         || vs.find(function (v) { return /^en/i.test(v.lang); });
       if (pref) u.voice = pref;
     }
-    speechSynthesis.speak(u);
+    speechSynthesis.cancel();
+    setTimeout(function () {
+      if (speechSynthesis.paused) speechSynthesis.resume();
+      speechSynthesis.speak(u);
+    }, 50);
     return true;
   }
 
