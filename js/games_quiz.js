@@ -22,7 +22,7 @@
   /* ---- 2 看义选词 ---- */
   GK.register({ id: 'm2w', icon: '🔤', name: '看义选词', desc: '看中文，选出对应单词', count: 10,
     run: function (ctx) { GK.runQuiz(ctx, { layout: 'grid2', prompt: function (c) { return '<div class="q-big q-cn">' + esc(c.m) + '</div>'; }, options: function (c) { return optsWord(ctx, c); },
-      after: function (cur) { ctx.speak(cur.w); } }); } });
+      after: function (cur) { ctx.speak(cur.w, 3); } }); } });
 
   /* ---- 3 听音选义 ---- */
   GK.register({ id: 'a2m', icon: '🎧', name: '听音选义', desc: '听发音，选出中文意思', count: 10,

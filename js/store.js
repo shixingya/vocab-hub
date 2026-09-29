@@ -221,21 +221,27 @@
   if (typeof speechSynthesis !== 'undefined') {
     speechSynthesis.onvoiceschanged = function () { voicesReady = true; };
   }
-  function speak(word) {
+  function speak(word, times) {
     if (!('speechSynthesis' in window)) return false;
-    var u = new SpeechSynthesisUtterance(word);
-    u.lang = 'en-US';
-    u.rate = 0.9;
+    var n = times || 1;
     var vs = speechSynthesis.getVoices();
+    var pref = null;
     if (voicesReady || vs.length) {
-      var pref = vs.find(function (v) { return /^en(-|_)?US/i.test(v.lang) && /female|zira|samantha/i.test(v.name); })
+      pref = vs.find(function (v) { return /^en(-|_)?US/i.test(v.lang) && /female|zira|samantha/i.test(v.name); })
         || vs.find(function (v) { return /^en/i.test(v.lang); });
+    }
+    function make() {
+      var u = new SpeechSynthesisUtterance(word);
+      u.lang = 'en-US';
+      u.rate = 0.9;
       if (pref) u.voice = pref;
+      return u;
     }
     speechSynthesis.cancel();
     setTimeout(function () {
       if (speechSynthesis.paused) speechSynthesis.resume();
-      speechSynthesis.speak(u);
+      // 同一个 utterance 对象不能重复入队，每遍都要新建
+      for (var i = 0; i < n; i++) speechSynthesis.speak(make());
     }, 50);
     return true;
   }
