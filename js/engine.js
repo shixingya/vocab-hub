@@ -49,6 +49,7 @@
       return false;
     }
     var cleanups = [], finished = false;
+    var startedAt = Date.now();
     var s = { score: 0, combo: 0, max: 0, right: 0, total: words.length, wrong: [], i: 0 };
 
     function setHud() {
@@ -60,7 +61,7 @@
     function award(right, w) {
       if (right) { s.combo++; if (s.combo > s.max) s.max = s.combo; s.right++; s.score += 10 + Math.min(20, (s.combo - 1) * 2); }
       else { s.combo = 0; if (w && s.wrong.indexOf(w) < 0) s.wrong.push(w); if (w) Store.addMistake(w); }
-      if (w) Store.markLearned(w.w, right);
+      if (w) Store.record(w, bankId, right);
       setHud();
       return s;
     }
@@ -75,6 +76,8 @@
       var score = o.score != null ? o.score : s.score;
       if (max) Store.best('max_combo', max);
       Store.bump('games');
+      Store.recordGame();
+      Store.recordSession((Date.now() - startedAt) / 1000);
       var acc = total ? Math.round(right / total * 100) : 0;
       window.VHApp.onGameEnd({ mode: mode.id, maxCombo: max, allRight: wrong.length === 0 });
       window.VHApp.showResult({

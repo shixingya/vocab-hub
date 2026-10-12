@@ -7,6 +7,7 @@
   GameKit.boot(S);
   window.VHShooter.boot(S);
   window.VHListen.boot(S);
+  window.VHReport.boot(S);
   window.VHStore = S;
 
   var state = { bankId: 'primary', level: 'all', lastMode: 'shooter' };
@@ -280,6 +281,8 @@
     $('result-home').onclick = function () { show('home'); renderStats(); };
 
     $('go-mistakes').onclick = function () { renderMistakes(); show('mistakes'); };
+    $('go-report').onclick = function () { window.VHReport.render(); show('report'); };
+    $('rp-refresh').onclick = function () { window.VHReport.render(); };
     $('go-achievements').onclick = function () { renderAchievements(); show('achievements'); };
     $('go-import').onclick = function () { show('import'); };
     $('mk-clear').onclick = function () {

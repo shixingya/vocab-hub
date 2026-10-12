@@ -253,7 +253,7 @@
             if (b.classList.contains('done')) return;
             b.classList.add('done');
             var isSeen = seen.indexOf(w) >= 0;
-            ctx.Store.markLearned(w.w, isSeen);
+            ctx.Store.record(w, ctx.bankId, isSeen);
             if (isSeen) { b.classList.add('opt-ok'); right++; ctx.sfx.good(); }
             else { b.classList.add('opt-bad'); if (wrong.indexOf(w) < 0) { wrong.push(w); ctx.Store.addMistake(w); } ctx.sfx.bad(); }
             picked++; ctx.setHud();

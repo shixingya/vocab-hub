@@ -52,6 +52,7 @@
 
   <!-- 工具入口 -->
   <section class="tool-row">
+    <button class="tool-btn" id="go-report">📊 学习报告</button>
     <button class="tool-btn" id="go-mistakes">📕 错题本 <span id="mistake-count" class="badge">0</span></button>
     <button class="tool-btn" id="go-achievements">🏅 成就</button>
     <button class="tool-btn" id="go-import">📥 导入词库</button>
@@ -112,6 +113,56 @@
   </div>
 </div>
 
+<!-- ============ 学习报告 ============ -->
+<div id="page-report" class="page">
+  <div class="game-topbar">
+    <button class="back-btn" data-exit="report">‹ 返回</button>
+    <div class="game-score">📊 学习报告</div>
+    <button class="ghost-btn small" id="rp-refresh">刷新</button>
+  </div>
+
+  <div class="stats-grid" id="rp-summary"></div>
+  <div class="rp-today" id="rp-today"></div>
+
+  <section class="card">
+    <div class="card-title">📈 近 14 天新学单词</div>
+    <div class="rp-trend" id="rp-trend"></div>
+    <div class="rp-tip" id="rp-trend-tip"></div>
+  </section>
+
+  <section class="card">
+    <div class="card-title">🎯 掌握度分布</div>
+    <div id="rp-buckets"></div>
+  </section>
+
+  <section class="card">
+    <div class="card-title">📚 词库进度</div>
+    <div id="rp-banks"></div>
+  </section>
+
+  <section class="card">
+    <div class="card-title">⚠️ 最容易错的词</div>
+    <div class="rp-chips" id="rp-hardest"></div>
+  </section>
+
+  <section class="card">
+    <div class="card-title">🔍 学过的单词 <span class="rp-count" id="rp-words-count"></span></div>
+    <input type="search" id="rp-search" class="rp-search" placeholder="搜索单词或释义…">
+    <div class="rp-filters" id="rp-filters"></div>
+    <div id="rp-words" class="rp-words"></div>
+  </section>
+
+  <section class="card">
+    <div class="card-title">📄 报告摘要</div>
+    <textarea id="rp-text" class="rp-text" readonly></textarea>
+    <div class="rp-actions">
+      <button class="big-btn" id="rp-copy">复制报告</button>
+      <button class="ghost-btn" id="rp-csv">下载 CSV 明细</button>
+    </div>
+    <div class="rp-tip" id="rp-storage-tip"></div>
+  </section>
+</div>
+
 <!-- ============ 错题本 ============ -->
 <div id="page-mistakes" class="page">
   <div class="game-topbar">
@@ -158,6 +209,7 @@ ability, 能力
 <script src="js/games_board.js"></script>
 <script src="js/shooter.js"></script>
 <script src="js/listen.js"></script>
+<script src="js/report.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>

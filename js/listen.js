@@ -12,7 +12,7 @@
     L = {
       queue: words.slice(0, TOTAL), qi: 0,
       streak: 0, bestStreak: 0, correct: 0,
-      wrongWords: [], answered: false, bankId: bankId
+      wrongWords: [], answered: false, bankId: bankId, startedAt: Date.now()
     };
     $('ln-round').textContent = '1';
     $('ln-streak').textContent = '0';
@@ -94,7 +94,7 @@
       L.wrongWords.push(cur);
       fb.innerHTML = '💡 正确答案：<b>' + cur.w + '</b> ' + (cur.ph || '');
     }
-    Store.markLearned(cur.w, right);
+    Store.record(cur, L.bankId, right);
 
     // 复播一遍正确发音，加深记忆
     setTimeout(function () { Store.speak(cur.w); }, 400);
@@ -109,6 +109,8 @@
     var bestStreakAll = Store.best('best_listen', L.bestStreak);
     var allRight = L.correct === L.queue.length;
     Store.bump('games');
+    Store.recordGame();
+    Store.recordSession((Date.now() - L.startedAt) / 1000);
     var stat = { correct: L.correct, total: L.queue.length, bestStreak: L.bestStreak };
     var wrong = L.wrongWords.slice();
     L = null;

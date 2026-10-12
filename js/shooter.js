@@ -24,6 +24,7 @@
       cannonX: 0.5, // 比例坐标，随宽度缩放
       firing: false, targetX: null, targetY: null,
       spawnTimer: 0, settled: false, lockUntil: 0,
+      startedAt: Date.now(),
       bankId: bankId
     };
 
@@ -226,7 +227,7 @@
     if (G.settled) return;
     G.settled = true;
     G.lockUntil = Date.now() + 1400;
-    Store.markLearned(G.answer.w, right);
+    Store.record(G.answer, G.bankId, right);
     if (!right) {
       Store.addMistake(G.answer);
       G.wrongWords.push(G.answer);
@@ -341,6 +342,8 @@
     };
     var bestScore = Store.best('best_shooter', G.score);
     Store.bump('games');
+    Store.recordGame();
+    Store.recordSession((Date.now() - G.startedAt) / 1000);
     cleanup();
     window.VHApp.onGameEnd({ mode: 'shooter', maxCombo: stat.maxCombo });
     window.VHApp.showResult({
